@@ -1,10 +1,11 @@
-import { Box, Button, Paper, TextField } from "@mui/material";
+import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import DnDUpload from "./DnDUpload";
 import axios from "axios";
 
-export default function Upload() {
+export default function Upload({ setNewUpload }) {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [imgURL, setImgURL] = useState("");
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
@@ -14,7 +15,8 @@ export default function Upload() {
     const formData = new FormData();
     formData.append("myFile", selectedFile);
     const response = await axios.post("/upload", formData);
-    console.log("response :>> ", response);
+    setImgURL(response.data.url);
+    setNewUpload(true);
   };
   return (
     <Box>
@@ -37,7 +39,6 @@ export default function Upload() {
           </Button>
         )}
       </Paper>
-      <DnDUpload />
     </Box>
   );
 }

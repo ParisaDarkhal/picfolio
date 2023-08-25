@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Button, Box, Paper } from "@mui/material";
 import axios from "axios";
 
-const DragAndDropUpload = () => {
+const DragAndDropUpload = ({ setNewUpload }) => {
   const [dragOver, setDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [imgURL, setImgURL] = useState("");
 
   const handleDragEnter = (event) => {
     event.preventDefault();
@@ -31,7 +32,8 @@ const DragAndDropUpload = () => {
     const formData = new FormData();
     formData.append("myFile", selectedFile);
     const response = await axios.post("/upload", formData);
-    console.log("response :>> ", response);
+    setImgURL(response.data.url);
+    setNewUpload(true);
   };
 
   return (

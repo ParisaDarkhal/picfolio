@@ -1,12 +1,13 @@
 const express = require("express"); //
 const multer = require("multer");
+const fs = require("fs/promises");
 
 const path = require("path"); //
 const PORT = process.env.PORT || 3001;
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "images");
+    cb(null, "public/images");
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -33,8 +34,20 @@ app.get("/", async (req, res) => {
 
 app.post("/upload", upload.single("myFile"), async (req, res) => {
   const file = req.file;
-  res.send("success");
-  console.log("file :>> ", file);
+  const imgURL = `http://localhost:${PORT}/images/${file.originalname}`;
+  res.json({ status: "success", url: imgURL });
+});
+
+app.get("/api/images", async (req, res) => {
+  try {
+    const imagesFolder = path.join(__dirname, "/public/images");
+    const imageFiles = await fs.readdir(imagesFolder);
+    console.log(imageFiles);
+    res.json(imageFiles);
+  } catch (error) {
+    console.error("Error reading image files", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 app.listen(PORT, () => {
