@@ -1,6 +1,7 @@
 import { Box, Button, Paper, TextField } from "@mui/material";
 import React, { useState } from "react";
 import DnDUpload from "./DnDUpload";
+import axios from "axios";
 
 export default function Upload() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -9,7 +10,12 @@ export default function Upload() {
     setSelectedFile(file);
   };
 
-  const handleUpload = () => {};
+  const handleUpload = async () => {
+    const formData = new FormData();
+    formData.append("myFile", selectedFile);
+    const response = await axios.post("/upload", formData);
+    console.log("response :>> ", response);
+  };
   return (
     <Box>
       <Paper>

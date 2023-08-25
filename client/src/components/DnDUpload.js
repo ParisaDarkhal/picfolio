@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Box, Paper } from "@mui/material";
+import axios from "axios";
 
 const DragAndDropUpload = () => {
   const [dragOver, setDragOver] = useState(false);
@@ -26,9 +27,11 @@ const DragAndDropUpload = () => {
     setSelectedFile(file);
   };
 
-  const handleUpload = () => {
-    // Here, you can handle the file upload logic
-    console.log("Uploading file:", selectedFile);
+  const handleUpload = async () => {
+    const formData = new FormData();
+    formData.append("myFile", selectedFile);
+    const response = await axios.post("/upload", formData);
+    console.log("response :>> ", response);
   };
 
   return (
