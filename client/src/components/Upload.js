@@ -1,5 +1,6 @@
-import { Box, Button, InputLabel, Paper, TextField } from "@mui/material";
+import { Box, Button, Paper, TextField } from "@mui/material";
 import React, { useState } from "react";
+import DnDUpload from "./DnDUpload";
 
 export default function Upload() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -19,15 +20,18 @@ export default function Upload() {
           fullWidth
           variant="outlined"
         ></TextField>
-        <Button
-          variant="contained"
-          color="primary"
-          style={{ margin: 5 }}
-          onClick={handleUpload}
-        >
-          Upload
-        </Button>
+        {selectedFile && (
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ margin: 5 }}
+            onClick={handleUpload}
+          >
+            Upload
+          </Button>
+        )}
       </Paper>
+      <DnDUpload />
     </Box>
   );
 }

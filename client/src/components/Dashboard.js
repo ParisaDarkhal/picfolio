@@ -8,7 +8,7 @@ export default function Dashboard() {
     <>
       <Navbar />
       <Grid container spacing={3} mt={3} ml={2}>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Upload />
         </Grid>
       </Grid>
