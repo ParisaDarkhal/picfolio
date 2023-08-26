@@ -1,17 +1,38 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Grid } from "@mui/material";
+import PhotoAlbum from "react-photo-album";
 
-const Album = ({ newUpload, setNewUpload }) => {
-  const [imageUrls, setImageUrls] = useState([]);
-
+const MyAlbum = ({
+  newUpload,
+  setNewUpload,
+  imageUrls,
+  setImageUrls,
+  setIndex,
+}) => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
         const response = await axios.get("/api/images");
-        const urls = response.data.map(
-          (imageName) => `http://localhost:3001/images/${imageName}`
-        );
+        const images = response.data.map((imgname) => {
+          const src = `http://localhost:3001/images/${imgname}`;
+          const img = new Image();
+          img.src = src;
+          if (img.width > img.height) {
+            img.width = 400;
+            img.height = 300;
+          } else {
+            img.width = 300;
+            img.height = 400;
+          }
+          return img;
+        });
+
+        const urls = images.map((image) => ({
+          key: image.src,
+          src: image.src,
+          width: image.width,
+          height: image.height,
+        }));
         setImageUrls(urls);
 
         setNewUpload(false);
@@ -31,7 +52,6 @@ const Album = ({ newUpload, setNewUpload }) => {
             (imageName) => `http://localhost:3001/images/${imageName}`
           );
           setImageUrls(urls);
-          console.log(urls);
           setNewUpload(false);
         } catch (error) {
           console.error("Error fetching images:", error);
@@ -41,32 +61,15 @@ const Album = ({ newUpload, setNewUpload }) => {
     }
   }, [newUpload]);
 
-  const handlePicClick = () => {};
-
   return (
-    <Grid container>
-      {imageUrls.map((imageUrl, index) => (
-        <Grid
-          item
-          style={{ marginTop: 1, marginLeft: 5 }}
-          sx={{
-            transition: "transform 0.3s",
-            cursor: "pointer",
-            "&:hover": { transform: "scale(1.1)" },
-          }}
-        >
-          <img
-            key={index}
-            src={imageUrl}
-            alt={`Image ${index}`}
-            width={200}
-            height={200}
-            onClick={handlePicClick}
-          />
-        </Grid>
-      ))}
-    </Grid>
+    <>
+      <PhotoAlbum
+        layout="masonry"
+        photos={imageUrls}
+        onClick={({ index }) => setIndex(index)}
+      />
+    </>
   );
 };
 
-export default Album;
+export default MyAlbum;
