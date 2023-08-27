@@ -81,6 +81,11 @@ const MyAlbum = ({
   return (
     <>
       <PhotoAlbum
+        columns={(containerWidth) => {
+          if (containerWidth < 400) return 2;
+          if (containerWidth < 800) return 3;
+          return 4;
+        }}
         layout="masonry"
         photos={imageUrls}
         style={{
