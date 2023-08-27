@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PhotoAlbum from "react-photo-album";
-import { FaTrash } from "react-icons/fa";
+import { Button, Card } from "@mui/material";
 
 const MyAlbum = ({
   newUpload,
@@ -79,6 +79,8 @@ const MyAlbum = ({
     }
   }, [newUpload]);
 
+  const handleDelete = (index) => {};
+
   return (
     <>
       <PhotoAlbum
@@ -90,6 +92,27 @@ const MyAlbum = ({
         layout="masonry"
         photos={imageUrls}
         onClick={({ index }) => setIndex(index)}
+        renderPhoto={({
+          imageProps: { src, alt, style, ...restImageProps },
+        }) => (
+          <Card
+            style={{
+              border: "solid black 1px",
+              margin: "10px",
+              padding: "5px",
+            }}
+          >
+            <img src={src} alt={alt} style={style} {...restImageProps} />
+            <Button
+              variant="contained"
+              color="error"
+              sx={{ mb: 1 }}
+              onClick={({ index }) => handleDelete(index)}
+            >
+              Delete
+            </Button>
+          </Card>
+        )}
       />
     </>
   );
