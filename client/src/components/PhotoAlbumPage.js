@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PhotoAlbum from "react-photo-album";
+import { FaTrash } from "react-icons/fa";
 
 const MyAlbum = ({
   newUpload,
@@ -88,11 +89,6 @@ const MyAlbum = ({
         }}
         layout="masonry"
         photos={imageUrls}
-        style={{
-          transition: "transform 0.3s",
-          cursor: "pointer",
-          "&:hover": { transform: "scale(1.1)" },
-        }}
         onClick={({ index }) => setIndex(index)}
       />
     </>
