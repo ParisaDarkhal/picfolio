@@ -2,9 +2,19 @@
 
 PicFolio is a web application built with React and styled using Material-UI (MUI). It allows users to upload photos, organize them into albums, view pictures, navigate through them, and even have a slideshow experience using a carousel. Users also have the ability to delete photos by clicking on a delete button. The application utilizes the `react-photo-album` library for creating albums and managing photos and the `multer` npm package to handle photo uploads.
 
-## Demo
+## Screenshots
 
-A live demo of the PicFolio application can be accessed here: [PicFolio Demo](https://your-demo-link-here)
+### Dashboard
+
+![Dashboard](./client/public/images/1.jpg)
+
+### Slide Show
+
+![Slide Show](./client/public//images/2.jpg)
+
+### Delete
+
+![Delete](./client//public//images/3.jpg)
 
 ## Features
 
