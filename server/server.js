@@ -42,11 +42,24 @@ app.get("/api/images", async (req, res) => {
   try {
     const imagesFolder = path.join(__dirname, "/public/images");
     const imageFiles = await fs.readdir(imagesFolder);
-    console.log(imageFiles);
     res.json(imageFiles);
   } catch (error) {
     console.error("Error reading image files", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.delete(`/api/images/:imageName`, async (req, res) => {
+  try {
+    const imageName = req.params.imageName;
+
+    const imagePath = path.join(__dirname, "/public/images", imageName);
+    //delete img file
+    await fs.unlink(imagePath);
+    res.json({ message: "Image deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting image:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 

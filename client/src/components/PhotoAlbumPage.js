@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PhotoAlbum from "react-photo-album";
 import { Button, Card } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const MyAlbum = ({
   newUpload,
@@ -10,6 +15,17 @@ const MyAlbum = ({
   setImageUrls,
   setIndex,
 }) => {
+  const [open, setOpen] = useState(false);
+  const [src, setSrc] = useState("");
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -79,10 +95,46 @@ const MyAlbum = ({
     }
   }, [newUpload]);
 
-  const handleDelete = (index) => {};
+  const handleConfirmation = (imgSrc) => {
+    setOpen(true);
+    setSrc(imgSrc);
+  };
+  const handleDelete = async () => {
+    try {
+      const imageName = src.split("images/")[1];
+      const response = await axios.delete(`/api/images/${imageName}`);
+
+      const updatedImageUrls = imageUrls.filter(
+        (imageUrl) => imageUrl.src !== src
+      );
+      setImageUrls(updatedImageUrls);
+      setOpen(false);
+    } catch (error) {
+      console.error("Error deleting image", error);
+    }
+  };
 
   return (
     <>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Heads Up!"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this picture?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancle</Button>
+          <Button onClick={handleDelete} autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
       <PhotoAlbum
         columns={(containerWidth) => {
           if (containerWidth < 400) return 2;
@@ -107,7 +159,7 @@ const MyAlbum = ({
               variant="contained"
               color="error"
               sx={{ mb: 1 }}
-              onClick={({ index }) => handleDelete(index)}
+              onClick={() => handleConfirmation(src)}
             >
               Delete
             </Button>
