@@ -52,7 +52,6 @@ app.get("/api/images", async (req, res) => {
 app.delete(`/api/images/:imageName`, async (req, res) => {
   try {
     const imageName = req.params.imageName;
-
     const imagePath = path.join(__dirname, "/public/images", imageName);
     //delete img file
     await fs.unlink(imagePath);
